@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Visualisasi interaktif arsitektur algoritma Naive Bayes - Klasifikasi AI dengan animasi data flow">
+    <title>Naive Bayes Architecture - Interactive AI Visualization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated background particles -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-badge">🤖 Kecerdasan Buatan</div>
+        <h1 class="hero-title">
+            <span class="gradient-text">Naive Bayes</span>
+            <br>Classifier Architecture
+        </h1>
+        <p class="hero-subtitle">Visualisasi interaktif arsitektur algoritma klasifikasi probabilistik berbasis Teorema Bayes</p>
+        <div class="hero-actions">
+            <button class="btn btn-primary" id="btnStartDemo" onclick="startFullDemo()">
+                <span class="btn-icon">▶</span> Mulai Demo
+            </button>
+            <button class="btn btn-secondary" onclick="scrollToSection('architecture')">
+                <span class="btn-icon">📐</span> Lihat Arsitektur
+            </button>
+        </div>
+    </header>
+
+    <!-- Bayes Theorem Section -->
+    <section class="section" id="theorem">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">📊 Fondasi Matematika</span>
+                <h2 class="section-title">Teorema Bayes</h2>
+                <p class="section-desc">Dasar matematis di balik algoritma Naive Bayes</p>
+            </div>
+            <div class="formula-card" id="formulaCard">
+                <div class="formula-wrapper">
+                    <div class="formula-main">
+                        <div class="formula-fraction">
+                            <span class="formula-part posterior" id="posteriorLabel">P(C|X)</span>
+                            <span class="formula-equals">=</span>
+                            <div class="fraction">
+                                <div class="fraction-top">
+                                    <span class="formula-part likelihood" id="likelihoodLabel">P(X|C)</span>
+                                    <span class="formula-multiply">×</span>
+                                    <span class="formula-part prior" id="priorLabel">P(C)</span>
+                                </div>
+                                <div class="fraction-line"></div>
+                                <div class="fraction-bottom">
+                                    <span class="formula-part evidence" id="evidenceLabel">P(X)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="formula-legend">
+                    <div class="legend-item" data-part="posterior">
+                        <div class="legend-color posterior-bg"></div>
+                        <div class="legend-text">
+                            <strong>P(C|X) — Posterior</strong>
+                            <span>Probabilitas kelas C diberikan fitur X</span>
+                        </div>
+                    </div>
+                    <div class="legend-item" data-part="likelihood">
+                        <div class="legend-color likelihood-bg"></div>
+                        <div class="legend-text">
+                            <strong>P(X|C) — Likelihood</strong>
+                            <span>Probabilitas fitur X diberikan kelas C</span>
+                        </div>
+                    </div>
+                    <div class="legend-item" data-part="prior">
+                        <div class="legend-color prior-bg"></div>
+                        <div class="legend-text">
+                            <strong>P(C) — Prior</strong>
+                            <span>Probabilitas awal kelas C</span>
+                        </div>
+                    </div>
+                    <div class="legend-item" data-part="evidence">
+                        <div class="legend-color evidence-bg"></div>
+                        <div class="legend-text">
+                            <strong>P(X) — Evidence</strong>
+                            <span>Probabilitas total fitur X</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Visualization -->
+    <section class="section section-dark" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">🏗️ Arsitektur</span>
+                <h2 class="section-title">Alur Klasifikasi Naive Bayes</h2>
+                <p class="section-desc">Klik pada setiap komponen untuk melihat detail</p>
+            </div>
+            <div class="architecture-canvas" id="archCanvas">
+                <!-- SVG for connection lines -->
+                <svg class="arch-connections" id="archSvg" width="100%" height="100%">
+                    <defs>
+                        <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.3"/>
+                            <stop offset="50%" style="stop-color:#6366f1;stop-opacity:1"/>
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.3"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+
+                <!-- Layer 1: Input Data -->
+                <div class="arch-layer" id="layer-input">
+                    <div class="layer-label">Input Layer</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node node-input" id="node-data" data-info="input">
+                            <div class="node-icon">📄</div>
+                            <div class="node-title">Dataset</div>
+                            <div class="node-subtitle">Training Data</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 2: Feature Extraction -->
+                <div class="arch-layer" id="layer-features">
+                    <div class="layer-label">Feature Extraction</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node node-feature" id="node-f1" data-info="feature">
+                            <div class="node-icon">🔤</div>
+                            <div class="node-title">Fitur 1</div>
+                            <div class="node-subtitle">X₁</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-feature" id="node-f2" data-info="feature">
+                            <div class="node-icon">🔢</div>
+                            <div class="node-title">Fitur 2</div>
+                            <div class="node-subtitle">X₂</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-feature" id="node-f3" data-info="feature">
+                            <div class="node-icon">📊</div>
+                            <div class="node-title">Fitur 3</div>
+                            <div class="node-subtitle">X₃</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-feature" id="node-f4" data-info="feature">
+                            <div class="node-icon">📈</div>
+                            <div class="node-title">Fitur n</div>
+                            <div class="node-subtitle">Xₙ</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 3: Probability Calculation -->
+                <div class="arch-layer" id="layer-probability">
+                    <div class="layer-label">Probability Engine</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node node-prob" id="node-prior" data-info="prior">
+                            <div class="node-icon">📋</div>
+                            <div class="node-title">Prior</div>
+                            <div class="node-subtitle">P(C)</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-prob" id="node-likelihood" data-info="likelihood">
+                            <div class="node-icon">⚡</div>
+                            <div class="node-title">Likelihood</div>
+                            <div class="node-subtitle">P(X|C)</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-prob" id="node-evidence" data-info="evidence">
+                            <div class="node-icon">🎯</div>
+                            <div class="node-title">Evidence</div>
+                            <div class="node-subtitle">P(X)</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 4: Bayes Computation -->
+                <div class="arch-layer" id="layer-bayes">
+                    <div class="layer-label">Bayes Computation</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node node-bayes" id="node-bayes" data-info="bayes">
+                            <div class="node-icon">🧠</div>
+                            <div class="node-title">Teorema Bayes</div>
+                            <div class="node-subtitle">P(C|X) = P(X|C)·P(C) / P(X)</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 5: Classification Output -->
+                <div class="arch-layer" id="layer-output">
+                    <div class="layer-label">Output Layer</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node node-output" id="node-c1" data-info="output">
+                            <div class="node-icon">✅</div>
+                            <div class="node-title">Kelas A</div>
+                            <div class="node-subtitle">P = 0.82</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                        <div class="arch-node node-output" id="node-c2" data-info="output">
+                            <div class="node-icon">❌</div>
+                            <div class="node-title">Kelas B</div>
+                            <div class="node-subtitle">P = 0.18</div>
+                            <div class="node-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data flow particles container -->
+                <div class="data-particles" id="dataParticles"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section class="section" id="demo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">🎮 Demo Interaktif</span>
+                <h2 class="section-title">Klasifikasi Email: Spam vs Ham</h2>
+                <p class="section-desc">Lihat bagaimana Naive Bayes mengklasifikasikan email</p>
+            </div>
+            <div class="demo-container">
+                <div class="demo-input-panel">
+                    <h3 class="panel-title">📧 Input Email</h3>
+                    <div class="demo-email-options">
+                        <button class="email-option active" id="email1" onclick="selectEmail(0)">
+                            <span class="email-preview">"Selamat! Anda memenangkan hadiah..."</span>
+                        </button>
+                        <button class="email-option" id="email2" onclick="selectEmail(1)">
+                            <span class="email-preview">"Meeting besok jam 10 pagi di ruang..."</span>
+                        </button>
+                        <button class="email-option" id="email3" onclick="selectEmail(2)">
+                            <span class="email-preview">"DISKON BESAR! Beli sekarang gratis..."</span>
+                        </button>
+                        <button class="email-option" id="email4" onclick="selectEmail(3)">
+                            <span class="email-preview">"Laporan bulanan sudah tersedia di..."</span>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary btn-full" id="btnClassify" onclick="classifyEmail()">
+                        <span class="btn-icon">🔍</span> Klasifikasikan
+                    </button>
+                </div>
+                <div class="demo-process-panel" id="processPanel">
+                    <h3 class="panel-title">⚙️ Proses Klasifikasi</h3>
+                    <div class="process-steps" id="processSteps">
+                        <div class="process-step" id="step1">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Tokenisasi</div>
+                                <div class="step-detail" id="step1Detail">Menunggu input...</div>
+                            </div>
+                            <div class="step-status" id="step1Status">⏳</div>
+                        </div>
+                        <div class="process-step" id="step2">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Hitung Prior P(C)</div>
+                                <div class="step-detail" id="step2Detail">Menunggu...</div>
+                            </div>
+                            <div class="step-status" id="step2Status">⏳</div>
+                        </div>
+                        <div class="process-step" id="step3">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Hitung Likelihood P(X|C)</div>
+                                <div class="step-detail" id="step3Detail">Menunggu...</div>
+                            </div>
+                            <div class="step-status" id="step3Status">⏳</div>
+                        </div>
+                        <div class="process-step" id="step4">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Hitung Posterior P(C|X)</div>
+                                <div class="step-detail" id="step4Detail">Menunggu...</div>
+                            </div>
+                            <div class="step-status" id="step4Status">⏳</div>
+                        </div>
+                        <div class="process-step" id="step5">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <div class="step-title">Hasil Klasifikasi</div>
+                                <div class="step-detail" id="step5Detail">Menunggu...</div>
+                            </div>
+                            <div class="step-status" id="step5Status">⏳</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-result-panel" id="resultPanel">
+                    <h3 class="panel-title">📊 Hasil</h3>
+                    <div class="result-content" id="resultContent">
+                        <div class="result-placeholder">
+                            <div class="result-placeholder-icon">🔮</div>
+                            <p>Pilih email dan klik "Klasifikasikan" untuk melihat hasil</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Cards Section -->
+    <section class="section section-dark" id="info">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">📚 Informasi</span>
+                <h2 class="section-title">Jenis Naive Bayes</h2>
+                <p class="section-desc">Tiga varian utama algoritma Naive Bayes</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card" id="card-gaussian">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">📈</div>
+                    <h3 class="card-title">Gaussian NB</h3>
+                    <p class="card-desc">Menggunakan distribusi Gaussian (Normal) untuk fitur kontinu. Cocok untuk data numerik seperti pengukuran fisik.</p>
+                    <div class="card-formula">P(xᵢ|C) = (1/√2πσ²) e^(-(xᵢ-μ)²/2σ²)</div>
+                    <div class="card-tags">
+                        <span class="tag">Kontinu</span>
+                        <span class="tag">Numerik</span>
+                        <span class="tag">Iris Dataset</span>
+                    </div>
+                </div>
+                <div class="info-card" id="card-multinomial">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">📝</div>
+                    <h3 class="card-title">Multinomial NB</h3>
+                    <p class="card-desc">Berbasis distribusi Multinomial. Ideal untuk klasifikasi teks menggunakan frekuensi kata (word count).</p>
+                    <div class="card-formula">P(xᵢ|C) = (Nᵧᵢ + α) / (Nᵧ + α·n)</div>
+                    <div class="card-tags">
+                        <span class="tag">Teks</span>
+                        <span class="tag">NLP</span>
+                        <span class="tag">Spam Filter</span>
+                    </div>
+                </div>
+                <div class="info-card" id="card-bernoulli">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">🔘</div>
+                    <h3 class="card-title">Bernoulli NB</h3>
+                    <p class="card-desc">Menggunakan distribusi Bernoulli untuk fitur biner. Hanya mempertimbangkan ada/tidaknya suatu fitur.</p>
+                    <div class="card-formula">P(xᵢ|C) = P(xᵢ=1|C)·xᵢ + (1-P(xᵢ=1|C))·(1-xᵢ)</div>
+                    <div class="card-tags">
+                        <span class="tag">Biner</span>
+                        <span class="tag">Boolean</span>
+                        <span class="tag">Sentiment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages & Disadvantages -->
+    <section class="section" id="proscons">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">⚖️ Evaluasi</span>
+                <h2 class="section-title">Kelebihan & Kekurangan</h2>
+            </div>
+            <div class="proscons-grid">
+                <div class="proscons-card pros">
+                    <h3 class="proscons-title">✅ Kelebihan</h3>
+                    <ul class="proscons-list">
+                        <li>
+                            <span class="proscons-icon">🚀</span>
+                            <div>
+                                <strong>Cepat & Efisien</strong>
+                                <p>Training dan prediksi sangat cepat, bahkan untuk dataset besar</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">📦</span>
+                            <div>
+                                <strong>Data Kecil</strong>
+                                <p>Bekerja baik meskipun dengan training data yang terbatas</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">🧩</span>
+                            <div>
+                                <strong>Mudah Dipahami</strong>
+                                <p>Interpretable dan mudah diimplementasikan</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">📊</span>
+                            <div>
+                                <strong>Multi-class</strong>
+                                <p>Secara natural mendukung klasifikasi multi-kelas</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="proscons-card cons">
+                    <h3 class="proscons-title">⚠️ Kekurangan</h3>
+                    <ul class="proscons-list">
+                        <li>
+                            <span class="proscons-icon">🔗</span>
+                            <div>
+                                <strong>Asumsi Independen</strong>
+                                <p>Mengasumsikan fitur-fitur independen, yang jarang terjadi di dunia nyata</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">0️⃣</span>
+                            <div>
+                                <strong>Zero Frequency</strong>
+                                <p>Probabilitas nol jika fitur tidak ditemukan di training data</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">📐</span>
+                            <div>
+                                <strong>Estimasi Probabilitas</strong>
+                                <p>Estimasi probabilitas bisa tidak akurat untuk beberapa kasus</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="proscons-icon">🔄</span>
+                            <div>
+                                <strong>Fitur Berkorelasi</strong>
+                                <p>Performa menurun jika fitur saling berkorelasi kuat</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">🧠</span>
+                    <span class="footer-title">Naive Bayes Visualizer</span>
+                </div>
+                <p class="footer-text">Tugas Mata Kuliah Kecerdasan Buatan (AI) — 2026</p>
+                <div class="footer-links">
+                    <a href="#theorem">Teorema</a>
+                    <a href="#architecture">Arsitektur</a>
+                    <a href="#demo">Demo</a>
+                    <a href="#info">Info</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Node Info Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-icon" id="modalIcon"></div>
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-desc" id="modalDesc"></p>
+            <div class="modal-details" id="modalDetails"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
